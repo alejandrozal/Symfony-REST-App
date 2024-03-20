@@ -3,3 +3,13 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+calculate-price:
+    path:       /calculate-price
+    controller: App\Controller\PaymentController::calculatePrice
+    methods:    POST
+
+purchase:
+    path:       /purchase
+    controller: App\Controller\PaymentController::purchase
+    methods:    POST
