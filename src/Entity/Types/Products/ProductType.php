@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Entity\Types;
-
-use App\Entity\Types\Products\IProductType;
+namespace App\Entity\Types\Products;
 
 class ProductType implements IProductType
 {
@@ -11,32 +9,32 @@ class ProductType implements IProductType
     private int $id;
     private string $name;
 
-    public function setPrice($price)
+    public function setPrice(int $price)
     {
         $this->price = $price;
     }
 
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
 
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
