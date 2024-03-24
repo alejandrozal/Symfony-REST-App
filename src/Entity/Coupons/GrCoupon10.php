@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Entity\Types\Coupons;
+namespace App\Entity\Coupons;
+
 
 use App\Entity\Types\Coupons\CouponType;
 

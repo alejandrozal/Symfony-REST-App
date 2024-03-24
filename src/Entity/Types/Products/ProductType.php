@@ -6,13 +6,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ProductType implements IProductType
 {
-
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private int $price;
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private int $id;
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     private string $name;
 
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     public function setPrice(int $price)
     {
         $this->price = $price;
@@ -23,8 +26,6 @@ class ProductType implements IProductType
         return $this->price;
     }
 
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     public function setId(int $id)
     {
         $this->id = $id;
@@ -35,8 +36,6 @@ class ProductType implements IProductType
         return $this->id;
     }
 
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     public function setName(string $name)
     {
         $this->name = $name;

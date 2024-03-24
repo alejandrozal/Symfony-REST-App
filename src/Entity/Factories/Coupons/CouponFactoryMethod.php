@@ -2,13 +2,13 @@
 
 namespace App\Entity\Factories\Coupons;
 
-use App\Entity\Types\Coupons\DeCoupon10,
-    App\Entity\Types\Coupons\DeCoupon15,
-    App\Entity\Types\Coupons\FrCoupon5,
-    App\Entity\Types\Coupons\GrCoupon10,
-    App\Entity\Types\Coupons\GrCoupon34,
-    App\Entity\Types\Coupons\GrCoupon45,
-    App\Entity\Types\Coupons\ItCoupon3;
+use App\Entity\Coupons\DeCoupon10,
+    App\Entity\Coupons\DeCoupon15,
+    App\Entity\Coupons\FrCoupon5,
+    App\Entity\Coupons\GrCoupon10,
+    App\Entity\Coupons\GrCoupon34,
+    App\Entity\Coupons\GrCoupon45,
+    App\Entity\Coupons\ItCoupon3;
 
 class CouponFactoryMethod extends AbstractCouponFactoryMethod
 {

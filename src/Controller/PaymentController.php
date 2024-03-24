@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController,
+use App\Exception\FormException,
+    Symfony\Bundle\FrameworkBundle\Controller\AbstractController,
     Symfony\Component\HttpFoundation\JsonResponse,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Validator\Validation,
     App\Entity\Factories\Products\ProductFactoryMethod,
     App\Entity\Factories\Coupons\CouponFactoryMethod;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PaymentController extends AbstractController
 {
@@ -20,32 +23,32 @@ class PaymentController extends AbstractController
         $this->couponFactory = new CouponFactoryMethod();
     }
 
-    public function calculatePrice(Request $request): JsonResponse
+    public function calculatePrice(Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $productId = $request->get("id");
-        $taxNumber = $request->get("taxNumber");
-        $couponCode = $request->get("couponCode");
+        $data = json_decode($request->getContent(), true);
 
-        $validator = Validation::createValidatorBuilder()->getValidator();
+        $productId = $data["product"] ?? null;
+        $taxNumber = $data["taxNumber"] ?? '';
+        $couponCode = $data["couponCode"] ?? '';
 
         $product = $this->productFactory->makeProduct($productId);
 
         if ($product) {
             $violations = $validator->validate($product);
-            var_dump($violations);
+            //var_dump($violations);
         } else {
-            die('error');
+            throw new NotFoundHttpException('Product not found.');
         }
 
         $coupon = $this->couponFactory->makeCoupon($couponCode);
 
         if ($coupon) {
             $violations = $validator->validate($coupon);
-            var_dump($violations);
+//            var_dump($violations);
         } else {
-            die('error');
+            throw new NotFoundHttpException('Coupon not found.');
         }
-
+        die();
         return $this->json([
             'data' => $request->get("test"),
             'message' => 'Welcome to your new controller!',

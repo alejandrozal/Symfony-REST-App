@@ -7,12 +7,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CouponType implements ICouponType
 {
 
-    private int $discount;
-    private string $code;
-    private string $country;
-
     #[Assert\NotNull]
     #[Assert\NotBlank]
+    private int $discount;
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    private string $code;
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    private string $country;
+
+
     public function setDiscount(int $discount)
     {
         $this->discount = $discount;
@@ -23,8 +28,6 @@ class CouponType implements ICouponType
         return $this->discount;
     }
 
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     public function setCode(string $code)
     {
         $this->code = $code;
@@ -35,8 +38,6 @@ class CouponType implements ICouponType
         return $this->code;
     }
 
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
     public function setCountry(string $country)
     {
         $this->country = $country;
