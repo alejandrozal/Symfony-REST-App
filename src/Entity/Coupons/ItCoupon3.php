@@ -6,11 +6,9 @@ use App\Entity\Types\Coupons\CouponType;
 
 class ItCoupon3 extends CouponType
 {
-    private string $code;
-    private int $discount;
-
     public function __constructor() {
-        $this->discount = 3;
-        $this->code = 'I3';
+        $this->setDiscount(3);
+        $this->setCode('I3');
+        $this->setCountry('Italy');
     }
 }
