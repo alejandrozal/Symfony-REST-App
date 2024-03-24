@@ -2,22 +2,50 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validation;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController,
+    Symfony\Component\HttpFoundation\JsonResponse,
+    Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Validator\Validation,
+    App\Entity\Factories\Products\ProductFactoryMethod,
+    App\Entity\Factories\Coupons\CouponFactoryMethod;
 
 class PaymentController extends AbstractController
 {
+    private ProductFactoryMethod $productFactory;
+    private CouponFactoryMethod $couponFactory;
+
+    public function __construct()
+    {
+        $this->productFactory = new ProductFactoryMethod();
+        $this->couponFactory = new CouponFactoryMethod();
+    }
+
     public function calculatePrice(Request $request): JsonResponse
     {
-        $validator = Validation::createValidatorBuilder()
-            ->enableAnnotationMapping()
-            ->getValidator();
+        $productId = $request->get("id");
+        $taxNumber = $request->get("taxNumber");
+        $couponCode = $request->get("couponCode");
 
-        $user = new De('John Doe', 'john@example.com');
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
-        $violations = $validator->validate($user);
+        $product = $this->productFactory->makeProduct($productId);
+
+        if ($product) {
+            $violations = $validator->validate($product);
+            var_dump($violations);
+        } else {
+            die('error');
+        }
+
+        $coupon = $this->couponFactory->makeCoupon($couponCode);
+
+        if ($coupon) {
+            $violations = $validator->validate($coupon);
+            var_dump($violations);
+        } else {
+            die('error');
+        }
+
         return $this->json([
             'data' => $request->get("test"),
             'message' => 'Welcome to your new controller!',

@@ -1,7 +1,8 @@
 <?php
 
-use App\Entity\Factories\Products\AbstractProductFactoryMethod,
-    App\Entity\Products\Iphone,
+namespace App\Entity\Factories\Products;
+
+use App\Entity\Products\Iphone,
     App\Entity\Products\Headphones,
     App\Entity\Products\PhoneCase;
 
@@ -12,13 +13,13 @@ class ProductFactoryMethod extends AbstractProductFactoryMethod
         $product = NULL;
 
         switch ($param) {
-            case "Iphone":
+            case 1:
                 $product = new Iphone();
                 break;
-            case "Headphones":
+            case 2:
                 $product = new Headphones();
                 break;
-            case "PhoneCase":
+            case 3:
                 $product = new PhoneCase();
                 break;
         }

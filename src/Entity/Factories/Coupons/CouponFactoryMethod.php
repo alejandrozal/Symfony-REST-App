@@ -1,7 +1,8 @@
 <?php
 
-use App\Entity\Factories\Coupons\AbstractCouponFactoryMethod,
-    App\Entity\Types\Coupons\DeCoupon10,
+namespace App\Entity\Factories\Coupons;
+
+use App\Entity\Types\Coupons\DeCoupon10,
     App\Entity\Types\Coupons\DeCoupon15,
     App\Entity\Types\Coupons\FrCoupon5,
     App\Entity\Types\Coupons\GrCoupon10,
