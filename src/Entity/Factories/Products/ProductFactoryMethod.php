@@ -1,13 +1,13 @@
 <?php
 
 use App\Entity\Factories\Products\AbstractProductFactoryMethod,
-    \App\Entity\Products\Iphone,
-    \App\Entity\Products\Headphones,
-    \App\Entity\Products\PhoneCase;
+    App\Entity\Products\Iphone,
+    App\Entity\Products\Headphones,
+    App\Entity\Products\PhoneCase;
 
 class ProductFactoryMethod extends AbstractProductFactoryMethod
 {
-    function makeProduct($param)
+    function makeProduct($param): Iphone|PhoneCase|Headphones|null
     {
         $product = NULL;
 
