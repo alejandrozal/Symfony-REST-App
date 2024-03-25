@@ -2,6 +2,118 @@
 ```
 Curl requests are at the bottom.
 ```
+# IN ENGLISH
+
+## Build a Symfony REST application for calculating product prices and processing payments.
+
+Two endpoints are required:
+POST: for price calculation
+
+http://127.0.0.1:80/calculate-price
+
+JSON request body example:
+```
+{
+    "product": 1,
+    "taxNumber": "DE123456789",
+    "couponCode": "D15"
+}
+```
+POST: for making a purchase
+
+http://127.0.0.1:80/purchase
+
+JSON request body example:
+```
+{
+    "product": 1,
+    "taxNumber": "IT12345678900",
+    "couponCode": "D15",
+    "paymentProcessor": "paypal"
+}
+```
+
+Upon successful request execution, return an HTTP response with status code 200.
+
+For invalid input data or payment errors, return an HTTP response with status code 400 and a JSON object with errors.
+
+## Products
+It is assumed that products are stored in a database. For example, you can take three products:
+- Iphone (100 euros)
+- Headphones (20 euros)
+- Case (10 euros)
+
+## Coupons
+If a coupon is available, the buyer can apply it to the purchase.
+
+A coupon can be of two types:
+- Fixed discount amount
+- Percentage of purchase amount
+We assume that coupons are created by the seller and stored somewhere (or hardcoded, at your discretion).
+
+That is, there should not be a situation where a coupon code determines the discount and the buyer can use any coupon code.
+
+For example, with coupons P10 (10% discount) and P100 (100% discount) available (in the database or hardcoded), the buyer should not be able to apply coupon P50 unless it is explicitly stored.
+
+The coupon code does not necessarily have to conform to any specific format. You can choose it at your discretion.
+
+## Tax Calculation
+When purchasing a product, the recipient must pay tax based on the country's tax number:
+- Germany - 19%
+- Italy - 22%
+- France - 20%
+- Greece - 24%
+
+As a result, for a buyer from Greece, the price of an iPhone is 124 euros (product price 100 euros + 24% tax).
+If the buyer has a coupon for a 6% discount on the purchase, the price will be 116.56 euros (product price 100 euros - 6% discount + 24% tax).
+
+Tax ID Format
+
+DEXXXXXXXXX - for residents of Germany,
+
+ITXXXXXXXXXXX - for residents of Italy,
+
+GRXXXXXXXXX - for residents of Greece,
+
+FRYYXXXXXXXXX - for residents of France
+
+where: 
+- the first two characters are the country code,
+- X - any digit from 0 to 9,
+- Y - any letter
+
+Note that the length of the tax ID varies for different countries.
+Tax ID formats may change, but this happens rarely (depending on legislation).
+
+## Details
+When completing the task, you need to:
+
+- validate all fields (including the correctness of the tax number according to the format) in the request bodies using Symfony validator
+- calculate the final purchase price including the coupon (if specified) and tax
+- use PaypalPaymentProcessor::pay() or StripePaymentProcessor::processPayment() for payment processing
+These classes are provided in this project and should be used exactly as they are. They accept price in different units (cents or dollars) in their payment methods.
+    - OR copy them into your project. For simplicity, consider these two classes as part of two different third-party SDKs, and **you cannot modify these classes or any logic inside them.**
+    - OR add systemeio/test-for-candidates as a dependency via Composer.
+- provide examples of HTTP requests to the two endpoints: path and request body (for manual testing) in curl command format in README.md
+
+CRUD for entities does not need to be implemented; we assume it "exists" and the data in the database is valid, i.e., checks in services that the coupon discount percentage is greater than 0, less than 1000, and similar checks are not necessary.
+
+When writing the test, use git. After completion, send the repository link.
+
+Consider the possibility of adding new PaymentProcessors.
+
+If you feel that a certain part of the task requires too much time to complete, you can choose the simplest solution and indicate possible implementation options in a comment that you consider.
+
+### It would be a plus to:
+
+- use containerization for PHP, PostgreSQL/MySQL
+- include PHPUnit tests
+- ensure the code adheres to SOLID principles (without fanaticism)
+- commit-by-commit implementation is welcome
+- demonstrate the ability NOT to use approaches like onion-based/DDD/CQS/hexagonal architecture when completing the task: we value correctness and completeness much more in our task; such complex concepts are rather inappropriate in our task.
+- We do not limit you in terms of completing the task, but we expect that in the test task, you will reveal the principles you adhere to in your work.
+
+# IN RUSSIAN
 ## Написать Symfony REST приложение для расчета цены продукта и проведения оплаты
 
 Необходимо написать 2 эндпоинта:
