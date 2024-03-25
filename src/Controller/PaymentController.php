@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Factories\PaymentSystems\PaymentSystemFactoryMethod;
 use App\Entity\Types\Coupons\ICouponType;
 use App\Entity\Types\Products\IProductType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,16 +14,19 @@ use App\Helpers\Helper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Exception;
 
 class PaymentController extends AbstractController
 {
     private ProductFactoryMethod $productFactory;
     private CouponFactoryMethod $couponFactory;
+    private PaymentSystemFactoryMethod $paymentSystemFactory;
 
     public function __construct()
     {
         $this->productFactory = new ProductFactoryMethod();
         $this->couponFactory = new CouponFactoryMethod();
+        $this->paymentSystemFactory = new PaymentSystemFactoryMethod();
     }
 
     public function calculatePrice(Request $request, ValidatorInterface $validator): JsonResponse
@@ -44,6 +48,9 @@ class PaymentController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function purchase(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -58,10 +65,14 @@ class PaymentController extends AbstractController
 
         $totalPrice = Helper::calculatePrice($taxNumber, $product, $coupon);
 
+        $result = $this->paymentSystemFactory->makePaymentSystem($paymentProcessor, $totalPrice);
+
+        if (!$result) {
+            $result = 'Must be the processing logic here';
+        }
         return $this->json([
-            'data' => $request->get("test"),
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/PaymentController.php',
+            'data' => $result,
+            'message' => "Here's the purchase result."
         ]);
     }
 
