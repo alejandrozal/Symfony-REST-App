@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
-use App\Exception\FormException,
-    Symfony\Bundle\FrameworkBundle\Controller\AbstractController,
-    Symfony\Component\HttpFoundation\JsonResponse,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Validator\Validation,
-    App\Entity\Factories\Products\ProductFactoryMethod,
-    App\Entity\Factories\Coupons\CouponFactoryMethod;
+use App\Entity\Types\Coupons\ICouponType;
+use App\Entity\Types\Products\IProductType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Factories\Products\ProductFactoryMethod;
+use App\Entity\Factories\Coupons\CouponFactoryMethod;
+use App\Helpers\Helper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PaymentController extends AbstractController
@@ -27,28 +29,35 @@ class PaymentController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $productId = $data["product"] ?? null;
+        $productId = $data["product"] ?? 0;
         $taxNumber = $data["taxNumber"] ?? '';
         $couponCode = $data["couponCode"] ?? '';
 
-        $product = $this->productFactory->makeProduct($productId);
+        $product = $this->getProduct($productId, $validator);
+        $coupon = $this->getCoupon($couponCode, $validator);
 
-        if ($product) {
-            $violations = $validator->validate($product);
-            //var_dump($violations);
-        } else {
-            throw new NotFoundHttpException('Product not found.');
-        }
+        $totalPrice = Helper::calculatePrice($taxNumber, $product, $coupon);
 
-        $coupon = $this->couponFactory->makeCoupon($couponCode);
+        return $this->json([
+            'data' => ['price' => $totalPrice],
+            'message' => 'Total price is ' . $totalPrice
+        ]);
+    }
 
-        if ($coupon) {
-            $violations = $validator->validate($coupon);
-//            var_dump($violations);
-        } else {
-            throw new NotFoundHttpException('Coupon not found.');
-        }
-        die();
+    public function purchase(Request $request, ValidatorInterface $validator): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $productId = $data["product"] ?? 0;
+        $taxNumber = $data["taxNumber"] ?? '';
+        $couponCode = $data["couponCode"] ?? '';
+        $paymentProcessor =  $data["paymentProcessor"] ?? '';
+
+        $product = $this->getProduct($productId, $validator);
+        $coupon = $this->getCoupon($couponCode, $validator);
+
+        $totalPrice = Helper::calculatePrice($taxNumber, $product, $coupon);
+
         return $this->json([
             'data' => $request->get("test"),
             'message' => 'Welcome to your new controller!',
@@ -56,12 +65,47 @@ class PaymentController extends AbstractController
         ]);
     }
 
-    public function purchase(Request $request): JsonResponse
+    /**
+     * @param int $productId
+     * @param ValidatorInterface $validator
+     * @return IProductType
+     */
+    public function getProduct(int $productId, ValidatorInterface $validator): IProductType
     {
-        return $this->json([
-            'data' => $request->get("test"),
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/PaymentController.php',
-        ]);
+        $product = $this->productFactory->makeProduct($productId);
+
+        if ($product) {
+            $validations = $validator->validate($product);
+            if ($validations->count()) {
+//              TODO Unit tests
+//              throw new ValidatorException($validations);
+            }
+        } else {
+            throw new NotFoundHttpException('Product not found.');
+        }
+
+        return $product;
+    }
+
+    /**
+     * @param string $couponCode
+     * @param ValidatorInterface $validator
+     * @return ICouponType
+     */
+    public function getCoupon(string $couponCode, ValidatorInterface $validator): ICouponType
+    {
+        //TODO refactor
+        $coupon = $this->couponFactory->makeCoupon($couponCode);
+
+        if ($coupon) {
+            $validations = $validator->validate($coupon);
+//          this is just an example of validation failure for "couponCode": "D10"
+            if ($validations->count()) {
+//              TODO Unit tests
+                throw new ValidatorException($validations);
+            }
+        }
+
+        return $coupon;
     }
 }

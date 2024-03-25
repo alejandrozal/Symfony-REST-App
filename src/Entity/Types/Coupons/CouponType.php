@@ -6,15 +6,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CouponType implements ICouponType
 {
-
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
+//    in case if it's not hardcoded via fabric method
+//    #[Assert\NotNull]
+//    #[Assert\NotBlank] and so on...
     private int $discount;
+//    in case if it's not hardcoded via fabric method
     #[Assert\NotNull]
     #[Assert\NotBlank]
     private string $code;
-    #[Assert\NotNull]
-    #[Assert\NotBlank]
+//    in case if it's not hardcoded via fabric method
+//    #[Assert\NotNull]
+//    #[Assert\NotBlank]
     private string $country;
 
 
@@ -23,7 +25,7 @@ class CouponType implements ICouponType
         $this->discount = $discount;
     }
 
-    public function getDiscount(): int
+    public function getDiscount(): ?int
     {
         return $this->discount;
     }

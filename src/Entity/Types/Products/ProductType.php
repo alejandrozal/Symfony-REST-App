@@ -6,14 +6,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ProductType implements IProductType
 {
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+//    in case if it's not hardcoded via fabric method
+//    #[Assert\NotBlank]
+//    #[Assert\NotNull]
     private int $price;
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+//    in case if it's not hardcoded via fabric method
+//    #[Assert\NotBlank]
+//    #[Assert\NotNull]
+//    #[Assert\GreaterThanOrEqual(1)]
     private int $id;
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+//    in case if it's not hardcoded via fabric method
+//    #[Assert\NotBlank]
+//    #[Assert\NotNull]
     private string $name;
 
     public function setPrice(int $price)

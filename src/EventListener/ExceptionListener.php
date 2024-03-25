@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Throwable;
 
 class ExceptionListener
@@ -21,9 +22,11 @@ class ExceptionListener
         $request = $event->getRequest();
 
         if (
-            $exception instanceof NotFoundHttpException
+            in_array('application/json', $request->getAcceptableContentTypes())
+            || $exception instanceof NotFoundHttpException
             || $exception instanceof MethodNotAllowedHttpException
-            || in_array('application/json', $request->getAcceptableContentTypes())
+            || $exception instanceof ValidatorException
+            || $exception instanceof BadRequestHttpException
         ) {
             $response = $this->createApiResponse($exception);
             $event->setResponse($response);

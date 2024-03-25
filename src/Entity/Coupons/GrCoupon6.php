@@ -4,7 +4,7 @@ namespace App\Entity\Coupons;
 
 use App\Entity\Types\Coupons\CouponType;
 
-class GrCoupon45 extends CouponType
+class GrCoupon6 extends CouponType
 {
 
 }

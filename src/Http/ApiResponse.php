@@ -28,9 +28,9 @@ class ApiResponse extends JsonResponse
      * @param mixed|null $data
      * @param array  $errors
      *
-     * @return string
+     * @return array
      */
-    private function format(string $message, mixed $data = null, array $errors = []): string
+    private function format(string $message, mixed $data = null, array $errors = []): array
     {
         if ($data === null) {
             $data = new \ArrayObject();
@@ -45,6 +45,6 @@ class ApiResponse extends JsonResponse
             $response['errors'] = $errors;
         }
 
-        return json_encode($response);
+        return $response;
     }
 }
