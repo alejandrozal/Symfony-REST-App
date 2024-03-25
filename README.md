@@ -1,6 +1,8 @@
 # test-for-me
-
-# Написать Symfony REST приложение для расчета цены продукта и проведения оплаты
+```
+Curl requests are at the bottom.
+```
+## Написать Symfony REST приложение для расчета цены продукта и проведения оплаты
 
 Необходимо написать 2 эндпоинта:
 1. POST: для расчёта цены
@@ -108,3 +110,65 @@ CRUD для сущностей писать не нужно, будем счит
 - продемонстрированное умение **НЕ!** использовать подходы вроде onion-based/DDD/CQS/гексагональной архитектуры при выполнении задания: мы куда больше ценим его корректность и полноту; такие сложные концепции в нашем задании скорее не уместны
 
 Мы не ограничиваем вас по срокам выполнения задания, но при этом ожидаем, что в тестовом задании вы раскроете принципы, которых придерживаетесь в работе. 
+
+# Curl Requests
+
+1. 
+
+1.1) 
+```
+curl --location 'http://127.0.0.1:8000/calculate-price' \
+--header 'Content-Type: application/json' \
+--data '{
+    "product": 1,
+    "taxNumber": "DE123456789",
+    "couponCode": "D15"
+}'
+```
+
+## Response
+```
+{
+    "data": {
+        "price": 119
+    },
+    "message": "Total price is 119"
+}
+```
+
+1.2) 
+```
+curl --location 'http://127.0.0.1:8000/calculate-price' \
+--header 'Content-Type: application/json' \
+--data '{
+    "product": 2,
+    "taxNumber": "DE123456789",
+    "couponCode": "D10"
+}'
+```
+## Response
+```
+{
+    "message": "Object(App\\Entity\\Coupons\\DeCoupon10).code:\n    This value should not be blank. (code c1051bb4-d103-4f74-8988-acbcafc7fdc3)\n",
+    "data": {}
+}
+```
+2. 
+```
+curl --location 'http://127.0.0.1:8000/purchase' \
+--header 'Content-Type: application/json' \
+--data '{
+    "product": 1,
+    "taxNumber": "IT12345678900",
+    "couponCode": "D15",
+    "paymentProcessor": "paypal"
+}'
+```
+
+## Response
+```
+{
+    "data": "Must be the processing logic here",
+    "message": "Here's the purchase result."
+}
+```
