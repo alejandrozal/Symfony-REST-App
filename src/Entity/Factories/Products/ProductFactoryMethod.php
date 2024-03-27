@@ -2,13 +2,14 @@
 
 namespace App\Entity\Factories\Products;
 
-use App\Entity\Products\Iphone,
-    App\Entity\Products\Headphones,
-    App\Entity\Products\PhoneCase;
+use App\Entity\Products\Iphone;
+use App\Entity\Products\Headphones;
+use App\Entity\Products\PhoneCase;
+use App\Entity\Types\Products\IProductType;
 
 class ProductFactoryMethod extends AbstractProductFactoryMethod
 {
-    function makeProduct($param): Iphone|PhoneCase|Headphones|null
+    function makeProduct($param): IProductType|null
     {
         $product = NULL;
 
