@@ -20,7 +20,6 @@ class CouponFactoryMethod extends AbstractCouponFactoryMethod
 
         switch ($param) {
             case "D10":
-                echo 22;
                 $coupon = new DeCoupon10();
                 $coupon->setDiscount(10);
                 //TODO Unit tests

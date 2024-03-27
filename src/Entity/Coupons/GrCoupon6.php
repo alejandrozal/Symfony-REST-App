@@ -6,5 +6,4 @@ use App\Entity\Types\Coupons\CouponType;
 
 class GrCoupon6 extends CouponType
 {
-
 }
