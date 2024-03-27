@@ -79,9 +79,9 @@ class PaymentController extends AbstractController
     /**
      * @param int $productId
      * @param ValidatorInterface $validator
-     * @return IProductType
+     * @return IProductType|null
      */
-    public function getProduct(int $productId, ValidatorInterface $validator): IProductType
+    public function getProduct(int $productId, ValidatorInterface $validator): IProductType|null
     {
         $product = $this->productFactory->makeProduct($productId);
 
@@ -101,9 +101,9 @@ class PaymentController extends AbstractController
     /**
      * @param string $couponCode
      * @param ValidatorInterface $validator
-     * @return ICouponType
+     * @return ICouponType|null
      */
-    public function getCoupon(string $couponCode, ValidatorInterface $validator): ICouponType
+    public function getCoupon(string $couponCode, ValidatorInterface $validator): ICouponType|null
     {
         //TODO refactor
         $coupon = $this->couponFactory->makeCoupon($couponCode);

@@ -10,15 +10,17 @@ use App\Entity\Coupons\GrCoupon34;
 use App\Entity\Coupons\GrCoupon45;
 use App\Entity\Coupons\ItCoupon3;
 use App\Entity\Coupons\GrCoupon6;
+use App\Entity\Types\Coupons\ICouponType;
 
 class CouponFactoryMethod extends AbstractCouponFactoryMethod
 {
-    function makeCoupon($param): DeCoupon15|ItCoupon3|GrCoupon45|FrCoupon5|GrCoupon10|GrCoupon34|DeCoupon10|GrCoupon6|null
+    function makeCoupon($param): ICouponType|null
     {
         $coupon = NULL;
 
         switch ($param) {
             case "D10":
+                echo 22;
                 $coupon = new DeCoupon10();
                 $coupon->setDiscount(10);
                 //TODO Unit tests
