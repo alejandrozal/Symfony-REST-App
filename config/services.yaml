@@ -16,8 +16,8 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            #- '../src/DependencyInjection/'
+            #- '../src/Entity/'
             - '../src/Kernel.php'
 
     App\EventListener\ExceptionListener:

@@ -18,18 +18,14 @@ use Exception;
 
 class PaymentController extends AbstractController
 {
-    private ProductFactoryMethod $productFactory;
-    private CouponFactoryMethod $couponFactory;
-    private PaymentSystemFactoryMethod $paymentSystemFactory;
+    public function __construct(
+        protected ProductFactoryMethod $productFactory,
+        protected CouponFactoryMethod $couponFactory,
+        protected PaymentSystemFactoryMethod $paymentSystemFactory,
+        protected ValidatorInterface $validator
+    ) {}
 
-    public function __construct()
-    {
-        $this->productFactory = new ProductFactoryMethod();
-        $this->couponFactory = new CouponFactoryMethod();
-        $this->paymentSystemFactory = new PaymentSystemFactoryMethod();
-    }
-
-    public function calculatePrice(Request $request, ValidatorInterface $validator): JsonResponse
+    public function calculatePrice(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -37,8 +33,8 @@ class PaymentController extends AbstractController
         $taxNumber = $data["taxNumber"] ?? '';
         $couponCode = $data["couponCode"] ?? '';
 
-        $product = $this->getProduct($productId, $validator);
-        $coupon = $this->getCoupon($couponCode, $validator);
+        $product = $this->getProduct($productId);
+        $coupon = $this->getCoupon($couponCode);
 
         $totalPrice = Helper::calculatePrice($taxNumber, $product, $coupon);
 
@@ -81,12 +77,12 @@ class PaymentController extends AbstractController
      * @param ValidatorInterface $validator
      * @return IProductType|null
      */
-    public function getProduct(int $productId, ValidatorInterface $validator): IProductType|null
+    public function getProduct(int $productId): IProductType|null
     {
         $product = $this->productFactory->makeProduct($productId);
 
         if ($product) {
-            $validations = $validator->validate($product);
+            $validations = $this->validator->validate($product);
             if ($validations->count()) {
 //              TODO Unit tests
 //              throw new ValidatorException($validations);
@@ -103,13 +99,13 @@ class PaymentController extends AbstractController
      * @param ValidatorInterface $validator
      * @return ICouponType|null
      */
-    public function getCoupon(string $couponCode, ValidatorInterface $validator): ICouponType|null
+    public function getCoupon(string $couponCode): ICouponType|null
     {
         //TODO refactor
         $coupon = $this->couponFactory->makeCoupon($couponCode);
 
         if ($coupon) {
-            $validations = $validator->validate($coupon);
+            $validations = $this->validator->validate($coupon);
 //          this is just an example of validation failure for "couponCode": "D10"
             if ($validations->count()) {
 //              TODO Unit tests
