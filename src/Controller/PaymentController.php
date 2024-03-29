@@ -12,6 +12,7 @@ use App\Entity\Factories\Products\ProductFactoryMethod;
 use App\Entity\Factories\Coupons\CouponFactoryMethod;
 use App\Helpers\Helper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Exception;
@@ -84,7 +85,7 @@ class PaymentController extends AbstractController
             $validations = $this->validator->validate($product);
             if ($validations->count()) {
 //              TODO Unit tests
-//              throw new ValidatorException($validations);
+//              throw new ValidationFailedException($product, $validations);
             }
         } else {
             throw new NotFoundHttpException('Product not found.');
@@ -107,7 +108,7 @@ class PaymentController extends AbstractController
 //          this is just an example of validation failure for "couponCode": "D10"
             if ($validations->count()) {
 //              TODO Unit tests
-                throw new ValidatorException($validations);
+                throw new ValidationFailedException($coupon, $validations);
             }
         }
 
