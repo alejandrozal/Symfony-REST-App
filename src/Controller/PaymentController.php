@@ -47,7 +47,7 @@ class PaymentController extends AbstractController
     /**
      * @throws Exception
      */
-    public function purchase(Request $request, ValidatorInterface $validator): JsonResponse
+    public function purchase(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -56,8 +56,8 @@ class PaymentController extends AbstractController
         $couponCode = $data["couponCode"] ?? '';
         $paymentProcessor =  $data["paymentProcessor"] ?? '';
 
-        $product = $this->getProduct($productId, $validator);
-        $coupon = $this->getCoupon($couponCode, $validator);
+        $product = $this->getProduct($productId);
+        $coupon = $this->getCoupon($couponCode);
 
         $totalPrice = Helper::calculatePrice($taxNumber, $product, $coupon);
 
@@ -74,7 +74,6 @@ class PaymentController extends AbstractController
 
     /**
      * @param int $productId
-     * @param ValidatorInterface $validator
      * @return IProductType|null
      */
     public function getProduct(int $productId): IProductType|null
@@ -96,7 +95,6 @@ class PaymentController extends AbstractController
 
     /**
      * @param string $couponCode
-     * @param ValidatorInterface $validator
      * @return ICouponType|null
      */
     public function getCoupon(string $couponCode): ICouponType|null
