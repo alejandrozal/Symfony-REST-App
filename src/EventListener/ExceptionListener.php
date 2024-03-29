@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Helpers\ValidationFailedErrorsBuilder;
 use App\Http\ApiResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -9,11 +10,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Throwable;
 
 class ExceptionListener
 {
+    public function __construct(
+        private ValidationFailedErrorsBuilder $validationFailedErrorsBuilder
+    ) { }
+
     public function __invoke(ExceptionEvent $event): void
     {
 
@@ -25,7 +30,7 @@ class ExceptionListener
             in_array('application/json', $request->getAcceptableContentTypes())
             || $exception instanceof NotFoundHttpException
             || $exception instanceof MethodNotAllowedHttpException
-            || $exception instanceof ValidatorException
+            || $exception instanceof ValidationFailedException
             || $exception instanceof BadRequestHttpException
         ) {
             $response = $this->createApiResponse($exception);
@@ -43,7 +48,7 @@ class ExceptionListener
     private function createApiResponse(Throwable $exception): ApiResponse
     {
         $statusCode = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
-        $errors = [];
+        $errors = $this->validationFailedErrorsBuilder->build($exception->getViolations());;
 
         return new ApiResponse($exception->getMessage(), null, $errors, $statusCode);
     }
