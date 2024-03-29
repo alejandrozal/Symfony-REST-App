@@ -13,7 +13,6 @@ use App\Entity\Factories\Coupons\CouponFactoryMethod;
 use App\Helpers\Helper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
-use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Exception;
 
