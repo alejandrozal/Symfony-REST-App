@@ -30,27 +30,6 @@ services:
     networks:
       - app-network
 
-  #MySQL Service
-#  database:
-#    image: mysql:5.7.22
-#    container_name: database
-#    restart: unless-stopped
-#    tty: true
-#    ports:
-#      - "3306:3306"
-#    environment:
-#      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-#      MYSQL_DATABASE: ${DB_DATABASE}
-#      MYSQL_USER: ${DB_USERNAME}
-#      MYSQL_PASSWORD: ${DB_PASSWORD}
-#    volumes:
-#      - dbdata:/var/lib/mysql
-#      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
-#      - ./docker/tmp/database:/tmp/database
-#    command: mysqld --init-file="/tmp/database/init.sql"
-#    networks:
-#      - app-network
-
 #Docker Networks
 networks:
   app-network:
