@@ -11,3 +11,4 @@
 .idea
 composer.json
 .env
+/docker/php
