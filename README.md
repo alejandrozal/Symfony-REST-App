@@ -233,7 +233,7 @@ docker-compose up -d --force-recreate
 
 1.1) 
 ```
-curl --location 'http://127.0.0.1:8000/calculate-price' \
+curl --location 'http://127.0.0.1:80/calculate-price' \
 --header 'Content-Type: application/json' \
 --data '{
     "product": 1,
@@ -254,7 +254,7 @@ curl --location 'http://127.0.0.1:8000/calculate-price' \
 
 1.2) 
 ```
-curl --location 'http://127.0.0.1:8000/calculate-price' \
+curl --location 'http://127.0.0.1:80/calculate-price' \
 --header 'Content-Type: application/json' \
 --data '{
     "product": 2,
@@ -271,7 +271,7 @@ curl --location 'http://127.0.0.1:8000/calculate-price' \
 ```
 2. 
 ```
-curl --location 'http://127.0.0.1:8000/purchase' \
+curl --location 'http://127.0.0.1:80/purchase' \
 --header 'Content-Type: application/json' \
 --data '{
     "product": 1,
