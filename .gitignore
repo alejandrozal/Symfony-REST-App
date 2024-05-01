@@ -11,4 +11,10 @@
 .idea
 composer.json
 .env
+.env.test
 /docker/php
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+.phpunit.cache/
+###< phpunit/phpunit ###
