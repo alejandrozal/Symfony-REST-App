@@ -1,6 +1,7 @@
 # test-for-me
 ```
 Curl requests are at the bottom.
+Run tests command: ./vendor/bin/phpunit
 ```
 # IN ENGLISH
 
